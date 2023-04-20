@@ -2,7 +2,7 @@
 
 First, in a console, run :
   > docker exec --interactive --tty kafka-broker kafka-topics --bootstrap-server kafka:9092 --create --topic quickstart
- to start the bootstrap topic
+to start the bootstrap topic
 
 Then run and LET run :
   > docker exec --interactive --tty kafka-broker kafka-console-consumer --bootstrap-server kafka:9092 --topic quickstart --from-beginning
