@@ -39,7 +39,7 @@ public class CarRentalApplication {
 			car.setPlateNumber("AA11BB");
 			carRepository.save(car);
 
-			System.out.println("-------------TEST????------------------");
+			System.out.println("-------------------------------");
 			System.out.println("Car found with findAll():");
 			
 			KafkaProducer<String, String> producer = new KafkaProducer<>(setProperties());
