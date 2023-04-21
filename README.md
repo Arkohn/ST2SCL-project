@@ -1,6 +1,7 @@
 # ST2SCL-project
 
-First, before all, open Docker Desktop
+## First, before all, open Docker Desktop
+
 Then, in the folder where this README is, open a terminal and run :
   > docker-compose up -d
 

@@ -39,21 +39,23 @@ public class CarRentalApplication {
 			car.setPlateNumber("AA11BB");
 			carRepository.save(car);
 
-			System.out.println("-------------------------------");
+			System.out.println("-------------TEST????------------------");
 			System.out.println("Car found with findAll():");
 			
 			KafkaProducer<String, String> producer = new KafkaProducer<>(setProperties());
 
 			for (Car c : carRepository.findAll()) {
-				// create a producer record
+				
+				System.out.println(c.toString()+"AAAAHHHHHHHHHHH");// create a producer record
+				
 				ProducerRecord<String, String> producerRecord = new ProducerRecord<>("topic", c.toString());
 				
 				// send data - asynchronous
 				producer.send(producerRecord);
-				System.out.println(c.toString());
+				// flush data - synchronous
+				producer.flush();
 			}
-			// flush data - synchronous
-			producer.flush();
+			
         
 			// flush and close producer
 			producer.close();
