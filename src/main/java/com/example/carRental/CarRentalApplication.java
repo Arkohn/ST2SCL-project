@@ -46,7 +46,7 @@ public class CarRentalApplication {
 
 			for (Car c : carRepository.findAll()) {
 				
-				System.out.println(c.toString()+"AAAAHHHHHHHHHHH");// create a producer record
+				System.out.println(c.toString());// create a producer record
 				
 				ProducerRecord<String, String> producerRecord = new ProducerRecord<>("topic", c.toString());
 				
@@ -65,7 +65,7 @@ public class CarRentalApplication {
 
 	public Properties setProperties(){
 
-        String bootstrapServers = "127.0.0.1:9092";
+        String bootstrapServers = "broker:9092";
 
 		// create Producer properties
         Properties properties = new Properties();
