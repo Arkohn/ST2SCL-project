@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.protocol.types.Field;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,15 +21,17 @@ import org.springframework.context.annotation.Bean;
 public class CarRentalApplication {
 
 	public static void main(String[] args) {
-		String generateTopic = "docker exec --interactive --tty kafka-broker kafka-topics --bootstrap-server kafka:9092 --create --topic quickstart";
-		ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", generateTopic);
+		SpringApplication.run(CarRentalApplication.class, args);
+
+
+		String[] generateTopic = new String[] {"/bin/bash", "/c","docker exec --interactive --tty kafka-broker kafka-topics --bootstrap-server broker:9092 --create --topic quickstart"};
+		ProcessBuilder pb = new ProcessBuilder(generateTopic);
 		try {
 			pb.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		SpringApplication.run(CarRentalApplication.class, args);
 	}
 
 	@Bean
@@ -41,8 +44,15 @@ public class CarRentalApplication {
 
 			System.out.println("-------------------------------");
 			System.out.println("Car found with findAll():");
-			
-			KafkaProducer<String, String> producer = new KafkaProducer<>(setProperties());
+			KafkaProducer<String, String> producer;
+			try {
+				 producer = new KafkaProducer<>(setProperties());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				producer = new KafkaProducer<>(setProperties());
+				e.printStackTrace();
+			}
+
 
 			for (Car c : carRepository.findAll()) {
 				
