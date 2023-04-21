@@ -24,48 +24,42 @@ public class CarRentalApplication {
 		SpringApplication.run(CarRentalApplication.class, args);
 
 
-		String[] generateTopic = new String[] {"/bin/bash", "/c","docker exec --interactive --tty kafka-broker kafka-topics --bootstrap-server broker:9092 --create --topic quickstart"};
-		ProcessBuilder pb = new ProcessBuilder(generateTopic);
-		try {
-			pb.start();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	@Bean
 	public CommandLineRunner demo(CarRepository carRepository) {
 		return (args) -> {
 
-			Car car = new Car();
-			car.setPlateNumber("AA11BB");
-			carRepository.save(car);
+			Car car1 = new Car();
+			car1.setPlateNumber("AA11BB");
+			Car car2 = new Car();
+			car2.setPlateNumber("ZZ99YY");
+			Car car3 = new Car();
+			car3.setPlateNumber("GL46EU");
+			ArrayList<Car> Cars = new ArrayList<>();
+			Cars.add(car1);
+			Cars.add(car2);
+			Cars.add(car3);
+			carRepository.saveAll(Cars);
 
 			System.out.println("-------------------------------");
 			System.out.println("Car found with findAll():");
 			KafkaProducer<String, String> producer;
-			try {
-				 producer = new KafkaProducer<>(setProperties());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				producer = new KafkaProducer<>(setProperties());
-				e.printStackTrace();
-			}
-
+			producer = new KafkaProducer<>(setProperties());
 
 			for (Car c : carRepository.findAll()) {
 				
 				System.out.println(c.toString());// create a producer record
 				
-				ProducerRecord<String, String> producerRecord = new ProducerRecord<>("topic", c.toString());
+				ProducerRecord<String, String> producerRecord = new ProducerRecord<>("quickstart", c.toString());
 				
 				// send data - asynchronous
 				producer.send(producerRecord);
-				// flush data - synchronous
-				producer.flush();
 			}
-			
+
+
+			// flush data - synchronous
+			producer.flush();
         
 			// flush and close producer
 			producer.close();
